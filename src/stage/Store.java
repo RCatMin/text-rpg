@@ -1,6 +1,8 @@
 package stage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import controlManage.IOControl;
 import controlManage.UnitDataControl;
@@ -8,11 +10,19 @@ import units.Item;
 
 public class Store implements Stage {
 	private ArrayList<Item> items;
-	private final int NUMBER = 1;
+	private final int NUMBER = 2;
+	
+	Map <Integer, Stage> stageMenu;
 
 	private void shop() {
 		items = new ArrayList<Item>();
 		initializeItem();
+	}
+	
+	// 메인 메뉴 뒤돌아가기
+	public void CheckBack() {
+		stageMenu = new HashMap<Integer, Stage>();
+		stageMenu.put(0, (Stage) new Lobby());
 	}
 
 	public void activate() {
@@ -21,7 +31,7 @@ public class Store implements Stage {
 			int inputMenu = (int) IOControl.input("\n여기에 입력하세요 : ", NUMBER);
 
 			if (inputMenu == 0) {
-				break;
+				stageMenu.get(inputMenu).activate();
 			} else if (isValidInputMenu(inputMenu)) {
 				purchaseItem(inputMenu);
 			}
@@ -109,9 +119,10 @@ public class Store implements Stage {
 	}
 
 	public void printShop() {
+		shop();
 		String headMessage = """
 				===================================================
-								 		상 점
+							상 점
 
 				[아이템 번호]	[타입]	[등급]	[상품명]	 [공격력]	   [가격]
 				""";
@@ -121,13 +132,13 @@ public class Store implements Stage {
 			Item item = items.get(i);
 
 			if (item.getType() == 1) {
-				IOControl.printString(String.format("%d 무 기	[%2s] [%11s] [%2d] [%5d]", i + 1, item.getRarity(),
+				IOControl.printString(String.format("%d 무 기	[%2s] [%11s] [%2d] [%5d] \n", i + 1, item.getRarity(),
 						item.getName(), item.getPower(), item.getPrice()));
 			} else if (item.getType() == 2) {
-				IOControl.printString(String.format("%d 방어구	[%2s] [%11s] [%2d] [%5d]", i + 1, item.getRarity(),
+				IOControl.printString(String.format("%d 방어구	[%2s] [%11s] [%2d] [%5d] \n", i + 1, item.getRarity(),
 						item.getName(), item.getPower(), item.getPrice()));
 			} else if (item.getType() == 3) {
-				IOControl.printString(String.format("%d 장신구	[%2s] [%11s] [%2d] [%5d]", i + 1, item.getRarity(),
+				IOControl.printString(String.format("%d 장신구	[%2s] [%11s] [%2d] [%5d] \n", i + 1, item.getRarity(),
 						item.getName(), item.getPower(), item.getPrice()));
 			}
 		}
