@@ -16,6 +16,9 @@ public class IOControl {
 		reader = new BufferedReader(new InputStreamReader(System.in));
 	}
 
+	private static final int STRING = 1;
+	private static final int NUMBER = 2;
+
 	public static IOControl instance = new IOControl();
 
 	public static IOControl getInstance() {
@@ -33,16 +36,34 @@ public class IOControl {
 		}
 	}
 
-	public static String inputString(String message) {
-		buffer.setLength(0);
-		buffer.append(message);
-		try {
-			writer.append(buffer);
-			writer.flush();
-			String input = reader.readLine();
-			return input;
-		} catch (Exception e) {
-			return "";
+	public static Object input(String message, int type) {
+		switch (type) {
+		case STRING:
+			buffer.setLength(0);
+			buffer.append(message);
+			try {
+				writer.append(buffer);
+				writer.flush();
+				String input = reader.readLine();
+				return input;
+			} catch (Exception e) {
+				return "";
+			}
+
+		case NUMBER:
+			buffer.setLength(0);
+			buffer.append(message);
+			try {
+				writer.append(buffer);
+				writer.flush();
+				int input = reader.read();
+				return input;
+			} catch (Exception e) {
+				return "";
+			}
+
+		default:
+			return null;
 		}
 	}
 
