@@ -3,6 +3,7 @@ package stage;
 import java.util.ArrayList;
 
 import controlManage.IOControl;
+import controlManage.UnitDataControl;
 import units.Item;
 
 public class Store implements Stage{
@@ -16,8 +17,74 @@ public class Store implements Stage{
 	
 	public void activate() {
 		printShop();
-		int inputMenu = (int) IOControl.input("\n여기에 입력하세요 : ", NUMBER);
+		while (true) {			
+			int inputMenu = (int) IOControl.input("\n여기에 입력하세요 : ", NUMBER);
+			
+			if (inputMenu == 0) {
+				break;
+			} else if (isValidInputMenu(inputMenu)) {
+				purchaseItem(inputMenu);
+			}
+		}
 	}
+	
+	private boolean isValidInputMenu(int menu) {
+		if (menu >= 1 && menu < items.size()) {
+			return true;			
+		} else {
+			return false;
+		}
+	}
+	
+	private void purchaseItem(int menu) {
+		Item item = items.get(menu - 1);
+		int itemPrice = item.getPrice();
+		// 유저 정보 불러오기
+		int userMoney = UnitDataControl.getMoney();
+		
+		if (itemPrice > userMoney) {
+			// 구매실패 메소드
+			printFailedPurchaseItem();
+			return;
+		}
+		
+		UnitDataControl.setMoney(userMoney - itemPrice);
+		int type = item.getType();
+		String rarity = item.getRarity();
+		String name = item.getName();
+		int power = item.getPower();
+		int price = item.getPrice();
+		
+		UnitDataControl.addItemList(new Item(type, rarity, name, power, price));
+		// 구매완료 메소드
+		printPurchaseItem();
+	}
+	
+	private void printFailedPurchaseItem() {
+		String message = 
+				"""
+				===================================================
+								아이템 구매에 실패하였습니다.
+				===================================================
+				""";
+		
+		IOControl.printString(message);
+	}
+	
+	private void printPurchaseItem() {
+		String message = 
+				"""
+				===================================================
+									** 구매 완료 **
+							상점에서 나가신 후 인벤토리를 확인하세요.
+				===================================================
+				""";
+		
+		IOControl.printString(message);
+		
+	}
+	
+	
 	
 	private void initializeItem() {
 		// 무기 (power를 공격력으로)
@@ -72,6 +139,7 @@ public class Store implements Stage{
 				"""
 				===================================================
 							각 아이템의 번호를 입력하시면 구매 가능
+							나가시려면 [0]을 입력하세요.
 				===================================================
 				""";
 		IOControl.printString(endMessage);
