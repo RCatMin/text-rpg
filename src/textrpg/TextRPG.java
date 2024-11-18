@@ -4,6 +4,8 @@ import controlManage.IOControl;
 import stage.Lobby;
 
 public class TextRPG {
+	private final int STRING = 1;
+	
 	private Lobby lobby;
 	private boolean isRun = true;
 	
@@ -19,7 +21,7 @@ public class TextRPG {
 	
 	public void run() {
 		start();
-		String input = IOControl.inputString("\n여기에 입력하세요 : ");
+		String input = (String) IOControl.input("\n여기에 입력하세요 : ", STRING);
 		if (input.equals("시작")) {
 			isRun = lobby.activate();
 		} else if (input.equals("종료")) {

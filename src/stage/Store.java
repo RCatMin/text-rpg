@@ -7,9 +7,16 @@ import units.Item;
 
 public class Store implements Stage{
 	private ArrayList <Item> items;
+	private final int NUMBER = 1;
+
+	private void shop() {
+		items = new ArrayList <Item>();
+		initializeItem();
+	}
+	
 	public void activate() {
 		printShop();
-		String inputMenu = IOControl.inputString("\n여기에 입력하세요 : ");
+		int inputMenu = (int) IOControl.input("\n여기에 입력하세요 : ", NUMBER);
 	}
 	
 	private void initializeItem() {
