@@ -33,6 +33,10 @@ public class UnitDataControl {
 		UnitDataControl.itemsList.add(item);
 	}
 	
+	public static ArrayList<Item> getItemList(){
+		return itemsList;
+	}
+	
 	public static int getMoney() {
 		return money;
 	}
